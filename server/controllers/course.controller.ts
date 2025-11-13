@@ -5,7 +5,6 @@ import cloudinary from "cloudinary";
 import { createCourse, getAllCoursesService } from "../services/course.service";
 import CourseModel from "../models/course.model";
 import { redis } from "../utils/redis";
-import { error } from "console";
 import mongoose from "mongoose";
 import path from "path";
 import ejs from "ejs";
@@ -88,7 +87,7 @@ export const getSingleCourse = catchAsyncErrors(
                     "-courseData.videoUrl -courseData.questions -courseData.suggestion -courseData.links"
                 );
 
-                await redis.set(courseId, JSON.stringify(course));
+                await redis.set(courseId, JSON.stringify(course), 'EX', 604800); // 7days
                 res.status(200).json({
                     success: true,
                     course,
