@@ -16,6 +16,40 @@
   }
 }
 
+/* when we set an input type to number then inc, dec arrow comes for removing that error */
+/* for chorme, edge, sfari,  opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* for firefoc */
+input[type='number']{
+     -moz-appearance: textfield;
+}
 body {
   color: rgb(var(--foreground-rgb));
+}
+@keyframes shake {
+  0%{
+    transform: translate(0);
+  }
+  20%{
+    transform: translate(-2px);
+  }
+  40%{
+    transform: translate((2px));
+  }
+  60%{
+    transform: translate(-2px);
+  }
+  80%{
+    transform: translate((2px));
+  }
+  100%{
+    transform: translate(0);
+  }
+}
+.shake{
+  animation: shake 0.5s ease-in-out;
 }

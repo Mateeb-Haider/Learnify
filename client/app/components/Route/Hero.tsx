@@ -8,13 +8,6 @@ type Props = {};
 const Hero: FC<Props> = (props) => {
   return (
     <div className="w-full 1000px:flex items-center">
-      <div className="1000px:w-[40%] flex 1000px:min-h-screen items-center justify-end pt-[70px] 1000px:pt-0 z-10">
-        <Image
-          src={require("../../../public/assets/heroImg.png")}
-          alt=""
-          className="object-contain 1100px:max-w-[90%] w-[90%] 1500px:max-w-[85%] h-[auto] z-[10]"
-        />
-      </div>
       <div className="1000px:w-[60%] flex flex-col items-center 1000px:mt-[0px] text-center 1000px:text-left mt-[150px]">
         <h2 className="dark:text-white text-black text-[30px] px-3 w-full 1000px:text-[70px] font-Josefin font-[600] py-2 1000px:leading-[75px] 1500px:!w-[55%] 1100px:!w-[78%] ">
           Improve your online experience better Instantly
@@ -62,6 +55,13 @@ const Hero: FC<Props> = (props) => {
             </Link>{" "}
           </p>
         </div>
+      </div>
+      <div className="1000px:w-[40%] flex 1000px:min-h-screen items-center justify-start pt-[70px] 1000px:pt-0 z-10">
+        <Image
+          src={require("../../../public/assets/heroImg.png")}
+          alt=""
+          className="object-contain 1100px:max-w-[90%] w-[90%] 1500px:max-w-[85%] h-[auto] z-[10]"
+        />
       </div>
     </div>
   );

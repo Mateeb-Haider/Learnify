@@ -5,13 +5,20 @@ import React, { FC, useState } from "react";
 import NavItems from "../utils/NavItems";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { FaRegUserCircle } from "react-icons/fa";
+import Login from "../components/Auth/Login";
+import SignUp from "../components/Auth/SignUp";
+import Verification from "../components/Auth/Verification";
+
+import CustomModel from "../utils/CustomModel";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   activeItem: number;
+  route: string;
+  setRoute: (route: string) => void;
 };
 
-const Header: FC<Props> = ({ activeItem, setOpen }) => {
+const Header: FC<Props> = ({ activeItem, open, setOpen, route, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
 
@@ -41,31 +48,40 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
       >
         <div className="w-[95%] 800px:w-[92%] m-auto py-2 h-full">
           <div className="w-full h-[80px] flex items-center justify-between p-3">
-            <div className="">
+            <div className="flex items-center">
               <Link
                 href={"/"}
-                className="text-[25px] font-Poppins font-[500] text-black dark:text-white "
+                className="text-[25px] font-Poppins font-[500] text-black dark:text-white"
               >
                 Learnify
               </Link>
             </div>
-            <div className="flex items-center ml-[40%]">
+
+            {/* Center nav: hidden on small screens, centered using flex */}
+            <div className="hidden 800px:flex flex-1 justify-center">
               <NavItems activeItem={activeItem} isMobile={false} />
+            </div>
+
+            {/* Right controls: theme, menu (mobile), user */}
+            <div className="flex items-center gap-4">
               <ThemeSwitcher />
-              {/* Only for mobile */}
-              <div className=" 800px:hidden ">
+
+              {/* Mobile menu icon */}
+              <div className="800px:hidden">
                 <HiOutlineMenuAlt3
                   size={25}
                   className="cursor-pointer dark:text-white text-black"
                   onClick={() => setOpenSidebar(true)}
                 />
               </div>
+
+              {/* User icon: shown on larger screens */}
+              <FaRegUserCircle
+                size={25}
+                className="hidden 800px:block cursor-pointer dark:text-white text-black"
+                onClick={() => setOpen(true)}
+              />
             </div>
-            <FaRegUserCircle
-              size={25}
-              className=" hidden 800px:block cursor-pointer dark:text-white text-black"
-              onClick={() => setOpen(true)}
-            />
           </div>
         </div>
         {/* Mobile side bar */}
@@ -75,7 +91,7 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
             onClick={handleClose}
             id="screen"
           >
-            <div className="w-[70%]  fixed z-[99999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0 ">
+            <div className="w-[60%]  fixed z-[99999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0 ">
               <div className="w-full text-center py-6">
                 <Link
                   href={"/"}
@@ -97,6 +113,46 @@ const Header: FC<Props> = ({ activeItem, setOpen }) => {
           </div>
         )}
       </div>
+      {route === "Login" && (
+        <>
+          {open && (
+            <CustomModel
+              open={open}
+              setOpen={setOpen}
+              setRoute={setRoute}
+              activeItem={activeItem}
+              component={Login}
+            />
+          )}
+        </>
+      )}
+      {route === "Sign-Up" && (
+        <>
+          {open && (
+            <CustomModel
+              open={open}
+              setOpen={setOpen}
+              setRoute={setRoute}
+              activeItem={activeItem}
+              component={SignUp}
+            />
+          )}
+        </>
+      )}
+
+      {route === "Verification" && (
+        <>
+          {open && (
+            <CustomModel
+              open={open}
+              setOpen={setOpen}
+              setRoute={setRoute}
+              activeItem={activeItem}
+              component={Verification}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 };
