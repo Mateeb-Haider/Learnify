@@ -32,9 +32,9 @@ export const registrationUser = catchAsyncErrors(
                 email,
                 password,
             };
-            const activatioToken = createActivationToken(user);
-            const activationCode = activatioToken.activationCode;
-            const data = { user: { name: user.name }, activatioToken };
+            const activationToken = createActivationToken(user);
+            const activationCode = activationToken.activationCode;
+            const data = { user: { name: user.name }, activationToken };
             const html = await ejs.renderFile(
                 path.join(__dirname, "../mails/activation-mail.ejs"),
                 data
@@ -49,7 +49,7 @@ export const registrationUser = catchAsyncErrors(
                 res.status(201).json({
                     success: true,
                     message: `Please check your email: ${user.email} to activate your account`,
-                    activatioToken: activatioToken.token,
+                    activationToken: activationToken.token,
                 });
             } catch (error: any) {
                 return next(new ErrorHandler(error.message, 400));

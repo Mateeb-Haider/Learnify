@@ -1,8 +1,11 @@
 import { styles } from "@/app/styles/styles";
+import { useActivationMutation } from "@/redux/features/auth/authApi";
 import { verify } from "crypto";
-import React, { FC, useRef, useState } from "react";
+import { stat } from "fs";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
+import { useSelector } from "react-redux";
 
 type Props = {
   setRoute: (route: string) => void;
@@ -15,13 +18,33 @@ type VerifyNumber = {
 };
 
 const Verification: FC<Props> = ({ setRoute }) => {
+  const { token } = useSelector((state: any) => state.auth);
+  const [activation, { isSuccess, error }] = useActivationMutation();
+  const [invalidError, setInvaidError] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Account Activated Successfully");
+      setRoute("Login");
+    }
+    if (error) {
+      if ("data" in error) {
+        const errorData = error as any;
+        toast.error(errorData.data.message);
+        setInvaidError(true);
+      } else {
+        console.log("Error Accoured", error);
+      }
+    }
+  }, [isSuccess, error]);
+
   const [verifyNumber, setVerifyNumber] = useState<VerifyNumber>({
     0: "",
     1: "",
     2: "",
     3: "",
   });
-  const [invalidError, setInvaidError] = useState<boolean>(false);
+  console.log(token);
   const inputRefs = [
     useRef<HTMLInputElement>(null),
     useRef<HTMLInputElement>(null),
@@ -29,7 +52,15 @@ const Verification: FC<Props> = ({ setRoute }) => {
     useRef<HTMLInputElement>(null),
   ];
   const verificationHandler = async () => {
-    setInvaidError(true);
+    const verificationNumber = Object.values(verifyNumber).join("");
+    if (verificationNumber.length !== 4) {
+      setInvaidError(true);
+      return;
+    }
+    await activation({
+      activation_token: token,
+      activation_code: verificationNumber,
+    });
   };
   const handleInputChange = (index: number, value: string) => {
     setInvaidError(false);
