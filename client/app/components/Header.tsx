@@ -8,8 +8,10 @@ import { FaRegUserCircle } from "react-icons/fa";
 import Login from "../components/Auth/Login";
 import SignUp from "../components/Auth/SignUp";
 import Verification from "../components/Auth/Verification";
-
 import CustomModel from "../utils/CustomModel";
+import { useSelector } from "react-redux";
+import Image from "next/image";
+import avatar from "../../public/assets/avatar.png";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -21,6 +23,7 @@ type Props = {
 const Header: FC<Props> = ({ activeItem, open, setOpen, route, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+  const { user } = useSelector((state: any) => state.auth);
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -75,12 +78,23 @@ const Header: FC<Props> = ({ activeItem, open, setOpen, route, setRoute }) => {
                 />
               </div>
 
-              {/* User icon: shown on larger screens */}
-              <FaRegUserCircle
-                size={25}
-                className="hidden 800px:block cursor-pointer dark:text-white text-black"
-                onClick={() => setOpen(true)}
-              />
+              {user ? (
+                <>
+                  <Link href="/profile">
+                    <Image
+                      src={user.avatar ? user.avatar : avatar}
+                      alt=""
+                      className="h-[40px] w-[40px] dark:bg-white dark:rounded-full"
+                    />
+                  </Link>
+                </>
+              ) : (
+                <FaRegUserCircle
+                  size={25}
+                  className="hidden 800px:block cursor-pointer dark:text-white text-black"
+                  onClick={() => setOpen(true)}
+                />
+              )}
             </div>
           </div>
         </div>
