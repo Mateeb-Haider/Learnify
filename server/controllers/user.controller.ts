@@ -156,8 +156,10 @@ export const logoutUser = catchAsyncErrors(async (req: Request, res: Response, n
     try {
         res.cookie("access_token", "", { maxAge: 1 });
         res.cookie("refresh_token", "", { maxAge: 1 });
-        const userId = req.user?._id || "";
-        redis.del(userId)
+        const userId = req.user?._id;
+        if (userId) {
+            redis.del(userId.toString());
+        }
         res.status(200).json({
             success: true,
             message: 'User logged out successfully',
@@ -233,8 +235,11 @@ export const socialAuth = catchAsyncErrors(async (req: Request, res: Response, n
         const user = await userModel.findOne({ email });
         if (!user) {
             const newUser = await userModel.create({ email, name, avatar });
-            sendToken(newUser, 200, res)
+            return sendToken(newUser, 200, res);
         }
+
+        // if user already exists, issue tokens and return
+        return sendToken(user, 200, res);
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
     };
