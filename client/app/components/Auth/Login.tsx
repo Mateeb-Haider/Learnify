@@ -60,7 +60,7 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
         </label>
         <input
           type="email"
-          name=""
+          name="email"
           value={values.email}
           onChange={handleChange}
           id="email"

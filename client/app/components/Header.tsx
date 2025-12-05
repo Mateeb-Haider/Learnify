@@ -13,7 +13,10 @@ import { useSelector } from "react-redux";
 import Image from "next/image";
 import avatar from "../../public/assets/avatar.png";
 import { useSession } from "next-auth/react";
-import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import {
+  useLogoutQuery,
+  useSocialAuthMutation,
+} from "../../redux/features/auth/authApi";
 import toast from "react-hot-toast";
 type Props = {
   open: boolean;
@@ -30,6 +33,9 @@ const Header: FC<Props> = ({ activeItem, open, setOpen, route, setRoute }) => {
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
 
+  const [logout, setLogout] = useState(false);
+  const {} = useLogoutQuery(undefined, { skip: !logout ? true : false });
+
   useEffect(() => {
     if (!user) {
       if (data) {
@@ -40,7 +46,13 @@ const Header: FC<Props> = ({ activeItem, open, setOpen, route, setRoute }) => {
         });
       }
     }
-    if (isSuccess) {
+    // If NextAuth session vanished while we still have a user, trigger logout
+    if (data === null && user) {
+      setLogout(true);
+    }
+
+    // Show success toast when social auth completed and session is available
+    if (data && isSuccess) {
       toast.success("Login Successful");
     }
   }, [data, user]);
@@ -61,13 +73,13 @@ const Header: FC<Props> = ({ activeItem, open, setOpen, route, setRoute }) => {
   };
 
   return (
-    <div className=" w-full relative">
+    <div className=" w-full relative ">
       <div
         className={`${
           active
-            ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] border-b z-[80] dark:border-[#ffffff1c] shadow-xl transition duration-500"
+            ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed  top-0 left-0 w-full h-[80px] border-b z-[80] dark:border-[#ffffff1c] shadow-xl transition duration-500"
             : "w-full border-b dark:border-[#ffffff1c] h-[80px] z-[80] dark:shadow"
-        }`}
+        }  `}
       >
         <div className="w-[95%] 800px:w-[92%] m-auto py-2 h-full">
           <div className="w-full h-[80px] flex items-center justify-between p-3">
@@ -102,9 +114,14 @@ const Header: FC<Props> = ({ activeItem, open, setOpen, route, setRoute }) => {
                 <>
                   <Link href="/profile">
                     <Image
-                      src={user.avatar ? user.avatar : avatar}
+                      src={user.avatar ? user.avatar.url : avatar}
                       alt=""
+                      height={40}
+                      width={40}
                       className="h-[40px] w-[40px] dark:bg-white dark:rounded-full"
+                      style={{
+                        border: activeItem === 5 ? "2px solid #37a39a" : "none",
+                      }}
                     />
                   </Link>
                 </>

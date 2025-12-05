@@ -248,21 +248,15 @@ export const socialAuth = catchAsyncErrors(async (req: Request, res: Response, n
 // update user info
 interface IUpdateUserInfo {
     name: string;
-    email: string;
+
 }
 export const updateUserInfo = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, email } = req.body as IUpdateUserInfo;
+        const { name } = req.body as IUpdateUserInfo;
         const userId = req.user?._id;
         const user = await userModel.findById(userId);
 
-        if (email && user) {
-            const isEmailExist = await userModel.findOne({ email });
-            if (isEmailExist) {
-                return next(new ErrorHandler("User  Already Exist With This Email", 400));
-            }
-            user.email = email;
-        }
+
 
         if (name && user) {
             user.name = name;
