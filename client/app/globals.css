@@ -23,6 +23,28 @@ input::-webkit-inner-spin-button{
   -webkit-appearance: none;
   margin: 0;
 }
+
+::-webkit-scrollbar{
+  width:8px
+}
+
+/* track */
+::-webkit-scrollbar-track {
+  background: #1771c6; 
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #f5f5f5b0;
+}
+
+/* handle on hover */
+/* track */
+::-webkit-scrollbar-thumb:hover {
+  background: #32ae7e;
+}
+
+
+
 /* for firefoc */
 input[type='number']{
      -moz-appearance: textfield;

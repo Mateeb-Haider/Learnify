@@ -7,7 +7,7 @@ interface ProtectedProps {
   children: React.ReactNode;
 }
 
-export default function adminProtected({ children }: ProtectedProps) {
+export default function AdminProtected({ children }: ProtectedProps) {
   const { user } = useSelector((state: any) => state.auth);
 
   const isAdmin = user?.role === "admin";
