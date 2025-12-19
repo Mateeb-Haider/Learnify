@@ -6,6 +6,7 @@ import { FaSleigh } from "react-icons/fa";
 import { BsLink45Deg } from "react-icons/bs";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import toast from "react-hot-toast";
+import CourseData from "./CourseData";
 
 type Props = {
   active: number;
@@ -55,6 +56,7 @@ const CourseContent: FC<Props> = ({
       item.title === "" ||
       item.description === "" ||
       item.videoUrl === "" ||
+      item.videoLength === "" ||
       item.links[0].title === "" ||
       item.links[0].url === ""
     ) {
@@ -73,6 +75,7 @@ const CourseContent: FC<Props> = ({
         videoUrl: "",
         title: "",
         description: "",
+        videoLength: "",
         videoSection: newVideoSection,
         links: [{ title: "", url: "" }],
       };
@@ -85,6 +88,7 @@ const CourseContent: FC<Props> = ({
       courseContentData[courseContentData.length - 1].title === "" ||
       courseContentData[courseContentData.length - 1].description === "" ||
       courseContentData[courseContentData.length - 1].videoUrl === "" ||
+      courseContentData[courseContentData.length - 1].videoLength === "" ||
       courseContentData[courseContentData.length - 1].links[0].title === "" ||
       courseContentData[courseContentData.length - 1].links[0].url === ""
     ) {
@@ -95,6 +99,7 @@ const CourseContent: FC<Props> = ({
         videoUrl: "",
         title: "",
         description: "",
+        videoLength: "",
         videoSection: `Untitled Section ${activeSection}`,
         links: [{ title: "", url: "" }],
       };
@@ -111,6 +116,7 @@ const CourseContent: FC<Props> = ({
       courseContentData[courseContentData.length - 1].title === "" ||
       courseContentData[courseContentData.length - 1].description === "" ||
       courseContentData[courseContentData.length - 1].videoUrl === "" ||
+      courseContentData[courseContentData.length - 1].videoLength === "" ||
       courseContentData[courseContentData.length - 1].links[0].title === "" ||
       courseContentData[courseContentData.length - 1].links[0].url === ""
     ) {
@@ -229,6 +235,22 @@ const CourseContent: FC<Props> = ({
                       />
                     </div>
                     <div className="my-3">
+                      <label className={styles.label}>
+                        Video Length (In Mintues)
+                      </label>
+                      <input
+                        type="number"
+                        placeholder="20"
+                        className={styles.input}
+                        value={item.videoLength}
+                        onChange={(e) => {
+                          const updatedData = [...courseContentData];
+                          updatedData[index].videoLength = e.target.value;
+                          setCourseContentData(updatedData);
+                        }}
+                      />
+                    </div>
+                    <div className="my-3">
                       <label className={styles.label}>Video Description</label>
                       <textarea
                         rows={8}
@@ -271,8 +293,10 @@ const CourseContent: FC<Props> = ({
                           value={link.title}
                           onChange={(e) => {
                             const updatedData = [...courseContentData];
-                            updatedData[index].links[linkIndex] =
-                              e.target.value;
+                            updatedData[index].links[linkIndex] = {
+                              ...updatedData[index].links[linkIndex],
+                              title: e.target.value,
+                            };
                             setCourseContentData(updatedData);
                           }}
                         />
@@ -284,8 +308,10 @@ const CourseContent: FC<Props> = ({
                           value={link.url}
                           onChange={(e) => {
                             const updatedData = [...courseContentData];
-                            updatedData[index].links[linkIndex] =
-                              e.target.value;
+                            updatedData[index].links[linkIndex] = {
+                              ...updatedData[index].links[linkIndex],
+                              url: e.target.value,
+                            };
                             setCourseContentData(updatedData);
                           }}
                         />

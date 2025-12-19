@@ -188,11 +188,11 @@ export const updateAccessToken = catchAsyncErrors(async (req: Request, res: Resp
         const user = JSON.parse(session);
 
         const accessToken = jwt.sign({ id: user._id }, process.env.ACCESS_TOKEN as string, {
-            expiresIn: '5m',
+            expiresIn: '15m',
         });
 
         const refreshToken = jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN as string, {
-            expiresIn: '3d',
+            expiresIn: '7d',
         });
         req.user = user;
 
@@ -201,7 +201,12 @@ export const updateAccessToken = catchAsyncErrors(async (req: Request, res: Resp
 
         await redis.set(user._id, JSON.stringify(user), "EX", 604800);  //& Days
 
+        // res.status(200).json({
+        //     success: true,
+        //     message: "token updated successfully"
+        // })
         next();
+
 
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));

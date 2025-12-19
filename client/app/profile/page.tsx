@@ -19,7 +19,7 @@ const page: FC<Props> = (props) => {
   return (
     <Protected>
       <Heading
-        title={`${user.name} | Profile`}
+        title={`${user?.name} | Profile`}
         description="Learnify is a platform for students to learn and get help from teachers"
         keywords="Mern, Machine Learning, Programming, Redux"
       />

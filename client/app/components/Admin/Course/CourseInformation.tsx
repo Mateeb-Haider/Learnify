@@ -1,6 +1,7 @@
 "use client";
 import { styles } from "@/app/styles/styles";
-import React, { FC, useState } from "react";
+import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
+import React, { FC, useEffect, useState } from "react";
 
 type Props = {
   courseInfo: any;
@@ -15,6 +16,15 @@ const CourseInformation: FC<Props> = ({
   setActive,
   setCourseInfo,
 }) => {
+  const { data } = useGetHeroDataQuery("Categories", {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    setCategories(data?.layout?.categories);
+  }, [data]);
   const [dragging, setDragging] = useState(false);
 
   const handleSubmit = (e: any) => {
@@ -62,6 +72,7 @@ const CourseInformation: FC<Props> = ({
       reader.readAsDataURL(file);
     }
   };
+  console.log(courseInfo);
   return (
     <div className="w-[80%] m-auto mt-24">
       <form onSubmit={handleSubmit} className="mb-10">
@@ -143,6 +154,31 @@ const CourseInformation: FC<Props> = ({
             placeholder="Next, Socket, Tailwind, LMS"
             className={`${styles.input}`}
           />
+        </div>
+        <br />
+        <div className="">
+          <label className={`${styles.label}`}> Course Category</label>
+          <select
+            className={`${styles.input} dark:!bg-black !rounded-lg`}
+            name=""
+            value={courseInfo.categories}
+            onChange={(e: any) =>
+              setCourseInfo({ ...courseInfo, categories: e.target.value })
+            }
+            id=""
+          >
+            <option value="">Select Category</option>
+            {categories &&
+              categories.map((item: any) => (
+                <option
+                  className="dark:text-white text-black"
+                  value={item.title}
+                  key={item._id}
+                >
+                  {item.title}
+                </option>
+              ))}
+          </select>
         </div>
         <br />
         <div className="flex justify-between">

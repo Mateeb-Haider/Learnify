@@ -32,13 +32,17 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
       toast.success("Login Success Fully");
       setOpen(false);
     }
+  }, [isSuccess]);
+
+  useEffect(() => {
     if (error) {
       if ("data" in error) {
         const errorData = error as any;
         toast.error(errorData.data.message);
       }
     }
-  }, [isSuccess, error]);
+  }, [error]);
+
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: schema,

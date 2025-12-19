@@ -4,7 +4,7 @@ import DashboardHeader from "@/app/components/Admin/DashboardHeader";
 import AdminSidebar from "@/app/components/Admin/Sidebar/AdminSidebar";
 import Heading from "@/app/utils/Heading";
 import React from "react";
-import EditCourse from "../../../components/Admin/Course/EditCourse";
+import EditCategories from "../../components/Admin/Customization/EditCategories";
 
 type Props = {};
 
@@ -25,8 +25,7 @@ const page = ({ params }: any) => {
         <div className="flex-1">
           <div className="w-full">
             <DashboardHeader />
-
-            <EditCourse id={id} />
+            <EditCategories />
           </div>
         </div>
       </div>

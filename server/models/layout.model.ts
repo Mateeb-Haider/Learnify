@@ -22,7 +22,7 @@ interface Layout extends Document {
     banner: {
         image: BannerImage;
         title: string;
-        subTitel: string;
+        subTitle: string;
     };
 }
 
@@ -60,7 +60,7 @@ const layoutSchema = new Schema<Layout>({
         title: {
             type: String,
         },
-        subTitel: {
+        subTitle: {
             type: String,
         },
     }

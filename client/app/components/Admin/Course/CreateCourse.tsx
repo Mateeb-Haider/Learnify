@@ -17,7 +17,7 @@ const CreateCourse = (props: Props) => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Course Created Successfully");
-      redirect("/admin/all-courses");
+      redirect("/admin/courses");
     }
     if (error) {
       if ("data" in error) {
@@ -35,6 +35,7 @@ const CreateCourse = (props: Props) => {
     estimatedPrice: "",
     tags: "",
     level: "",
+    categories: "",
     demoUrl: "",
     thumbnail: "",
   });
@@ -46,6 +47,7 @@ const CreateCourse = (props: Props) => {
       title: "",
       description: "",
       videoSection: "Untitled Section",
+      videoLength: "",
       links: [
         {
           title: "",
@@ -75,6 +77,7 @@ const CreateCourse = (props: Props) => {
         title: courseContent.title,
         description: courseContent.description,
         videoSection: courseContent.videoSection,
+        videoLength: courseContent.videoLength,
         links: courseContent.links.map((link) => ({
           title: link.title,
           url: link.url,
@@ -89,6 +92,7 @@ const CreateCourse = (props: Props) => {
       description: courseInfo.description,
       price: Number(courseInfo.price),
       estimatedPrice: Number(courseInfo.estimatedPrice),
+      categories: courseInfo.categories,
       tags: courseInfo.tags,
       thumbnail: courseInfo.thumbnail,
       level: courseInfo.level,
@@ -106,6 +110,7 @@ const CreateCourse = (props: Props) => {
       await createCourse(data);
     }
   };
+  console.log(courseData);
 
   return (
     <div className="w-full flex min-h-screen">
@@ -144,6 +149,7 @@ const CreateCourse = (props: Props) => {
             setActive={setActive}
             courseData={courseData}
             handleCourseCreate={handleCourseCreate}
+            isEdit={false}
           />
         )}
       </div>
