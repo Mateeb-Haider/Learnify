@@ -111,7 +111,7 @@ const sidebarItems: SidebarItem[] = [
   // Analytics Section
   {
     title: "Courses Analytics",
-    to: "/admin/courses-analytics",
+    to: "/admin/course-analytics",
     icon: <BarChartOutlinedIcon />,
     section: "Analytics",
   },
