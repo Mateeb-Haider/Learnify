@@ -22,7 +22,12 @@ app.use(cookieParser());
 app.use(cors({
     origin: ['http://localhost:3000'],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+// Explicitly handle preflight requests
+app.options('*', cors());
 
 // routes
 app.use('/api/v1', userRouter, courseRouter, orderRouter, notificationRouter, analyticsRouter, layoutRouter);

@@ -40,7 +40,7 @@ const EditCategories = (props: Props) => {
       toast.success("Category Updated Successfully!");
       refetch(); // Refetch to get updated data
     }
-  }, [isSuccess]);
+  }, [isSuccess, refetch]);
 
   useEffect(() => {
     if (error && "data" in error) {
@@ -63,6 +63,15 @@ const EditCategories = (props: Props) => {
   };
 
   const handleAddCategory = () => {
+    // If there are no categories, allow adding the first one
+    if (categories.length === 0) {
+      const tempId = `temp-${Date.now()}-${Math.random()
+        .toString(36)
+        .substr(2, 9)}`;
+      setCategories([{ _id: tempId, title: "", isNew: true }]);
+      return;
+    }
+
     const lastCategory = categories[categories.length - 1];
     if (!lastCategory || lastCategory.title.trim() === "") {
       toast.error("Please fill the current category before adding a new one");
@@ -100,9 +109,13 @@ const EditCategories = (props: Props) => {
     original: Category[],
     newCategories: Category[]
   ) => {
-    // Filter out isNew flag for comparison
+    // Filter out flags and temp ids for comparison
     const cleanOriginal = original.map(({ isNew, ...rest }) => rest);
-    const cleanNew = newCategories.map(({ isNew, ...rest }) => rest);
+    const cleanNew = newCategories.map(({ isNew, _id, ...rest }) => ({
+      ...rest,
+      // drop client-only temp ids so they don't force diff
+      _id: _id && _id.startsWith("temp-") ? undefined : _id,
+    }));
     return JSON.stringify(cleanOriginal) === JSON.stringify(cleanNew);
   };
 
@@ -131,8 +144,11 @@ const EditCategories = (props: Props) => {
     }
 
     try {
-      // Remove isNew flag before sending to server
-      const categoriesToSend = categories.map(({ isNew, ...rest }) => rest);
+      // Remove client-only markers before sending to server
+      const categoriesToSend = categories.map(({ isNew, _id, ...rest }) => ({
+        ...rest,
+        _id: _id && _id.startsWith("temp-") ? undefined : _id,
+      }));
 
       await editLayout({
         type: "Categories",
@@ -283,7 +299,7 @@ const EditCategories = (props: Props) => {
             {hasChanges && (
               <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                  You have unsaved changes. Click "Save Changes" to update your
+                  You have unsaved changes. Click Save Changes to update your
                   categories.
                 </p>
               </div>

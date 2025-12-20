@@ -12,6 +12,13 @@ import { redis } from "../utils/redis";
 import { getAllUsersService, getUserById, updateUserRoleService } from "../services/user.service";
 import cloudinary from 'cloudinary';
 
+// Configure Cloudinary
+cloudinary.v2.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_SECRET_KEY,
+});
+
 // Register User
 interface IRegestrationBody {
     name: string;
@@ -136,6 +143,11 @@ export const loginUser = catchAsyncErrors(async (req: Request, res: Response, ne
         const user = await userModel.findOne({ email }).select("+password");
         if (!user) {
             return next(new ErrorHandler("Invalid Email or Password", 400));
+        }
+
+        // Prevent bcrypt.compare with undefined hash (social-auth users have no password)
+        if (!user.password) {
+            return next(new ErrorHandler("Account has no password. Use social login or set a password.", 400));
         }
 
         const isPasswordMatch = await user.comparePassword(password);
