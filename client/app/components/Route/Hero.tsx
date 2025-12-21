@@ -1,3 +1,4 @@
+import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 import Image from "next/image";
 import Link from "next/link";
 import React, { FC } from "react";
@@ -6,16 +7,16 @@ import { BiSearch } from "react-icons/bi";
 type Props = {};
 
 const Hero: FC<Props> = (props) => {
+    const {data} = useGetHeroDataQuery("Banner",{});
   return (
     <div className="w-full 1000px:flex items-center">
       <div className="1000px:w-[60%] flex flex-col items-center 1000px:mt-[0px] text-center 1000px:text-left mt-[150px]">
-        <h2 className="dark:text-white text-black text-[30px] px-3 w-full 1000px:text-[70px] font-Josefin font-[600] py-2 1000px:leading-[75px] 1500px:!w-[55%] 1100px:!w-[78%] ">
-          Improve your online experience better Instantly
+        <h2 className="dark:text-white text-black text-[30px] px-3 w-full 1000px:text-[50px] font-Poppins font-[500] py-2 1000px:leading-[75px] 1500px:!w-[55%] 1100px:!w-[78%] ">
+          {data?.layout?.banner?.title}
         </h2>
 
-        <p className="dark:text-white text-black font-Josefin font-[600] text-[18px] 1500px:!w-[55%] 1100px:!w-[78%] px-3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, similique
-          optio? Id cum quasi inventore?
+        <p className="dark:text-white  text-black font-Poppins font-[1000] text-[12px] 1500px:!w-[55%] 1100px:!w-[78%] px-3">
+        {data?.layout?.banner?.subTitle}
         </p>
         <br />
         <div className="1500px:w-[55%] 1100px:w-[78%] w-[90%] flex items-center ">
@@ -52,13 +53,15 @@ const Hero: FC<Props> = (props) => {
               className="dark:text-[#26e256] text-[crimson]"
             >
               View Courses
-            </Link>{" "}
+            </Link>
           </p>
         </div>
       </div>
       <div className="1000px:w-[40%] flex 1000px:min-h-screen items-center justify-start pt-[70px] 1000px:pt-0 z-10">
         <Image
-          src={require("../../../public/assets/heroImg.png")}
+          src={data?.layout?.banner?.image?.url}
+          height={400}
+          width={400}
           alt=""
           className="object-contain 1100px:max-w-[90%] w-[90%] 1500px:max-w-[85%] h-[auto] z-[10]"
         />

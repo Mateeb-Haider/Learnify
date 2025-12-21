@@ -200,7 +200,7 @@ const EditHero: FC = () => {
                   Hero Section Editor
                 </h2>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                  Customize your website's hero banner
+                  Customize your website hero banner
                 </p>
               </div>
               <ImageIcon className="w-8 h-8 dark:text-blue-400 text-blue-600" />
