@@ -6,7 +6,9 @@ interface ProtectedProps {
 }
 
 export default function Protected({ children }: ProtectedProps) {
-  const isAuthenticated = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) return null;
 
   return isAuthenticated ? children : redirect("/");
 }

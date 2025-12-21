@@ -46,16 +46,12 @@ const Header: FC<Props> = ({ activeItem, open, setOpen, route, setRoute }) => {
         });
       }
     }
-    // If NextAuth session vanished while we still have a user, trigger logout
-    if (data === null && user) {
-      setLogout(true);
-    }
 
     // Show success toast when social auth completed and session is available
     if (data && isSuccess) {
       toast.success("Login Successful");
     }
-  }, [data, user]);
+  }, [data, user, socialAuth, isSuccess]);
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
