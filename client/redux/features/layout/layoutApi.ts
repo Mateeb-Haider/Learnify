@@ -23,7 +23,8 @@ export const layoutApi = apiSlice.injectEndpoints({
                 method: "PUT",
                 credentials: "include" as const
             })
-        })
+        }),
+        
     })
 })
 export const { useGetHeroDataQuery, useEditLayoutMutation } = layoutApi;
