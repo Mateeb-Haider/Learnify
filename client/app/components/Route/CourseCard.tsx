@@ -9,10 +9,12 @@ type Props = {
   
 }
 
-const CourseCard  : FC<Props> = ({ item, isProfile = false,  }) => {
+const CourseCard  : FC<Props> = ({ item, isProfile = false  }) => {
   return (
      <div className='rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform cursor-pointer bg-white dark:bg-gray-800'>
-  <Link href={isProfile ? `/course/${item._id}` : `/course-access/${item._id}`}>
+  {/* <Link href={isProfile ? `/course/${item._id}` : `/course-access/${item._id}`}> */}
+  <Link href={`/course/${item._id}`}>
+
     <div className='relative h-48 overflow-hidden'>
       <img 
         src={item?.thumbnail?.url} 
