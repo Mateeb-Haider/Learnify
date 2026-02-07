@@ -10,11 +10,23 @@ import sendMail from "../utils/sendMail";
 import CourseModel from "../models/course.model";
 import { getAllOrdersService, newOrder } from "../services/order.service";
 import NotificationModel from "../models/notification.model";
-
+import { redis } from "../utils/redis";
+require('dotenv').config();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 // create order
 export const createOrder = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { courseId, payment_info } = req.body as IOrder;
+
+        if(payment_info){
+            if("id" in payment_info){
+                const paymentIntentId = payment_info.id;
+                const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+                if(paymentIntent.status !== "succeeded"){
+                    return next(new ErrorHandler("Payment not authorized", 400));
+                }
+            }
+        }
 
         const user = await userModel.findById(req.user?._id);
 
@@ -40,7 +52,7 @@ export const createOrder = catchAsyncErrors(async (req: Request, res: Response, 
 
         const mailData = {
             order: {
-                _id: course._id.toString().slice(0, 6),
+                _id: course._id?.toString().slice(0, 6),
                 name: course.name,
                 price: course.price,
                 date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
@@ -62,7 +74,8 @@ export const createOrder = catchAsyncErrors(async (req: Request, res: Response, 
             return next(new ErrorHandler(error.message, 500));
         }
 
-        user?.courses.push(course?._id);
+        user?.courses.push(course?._id as any);
+        await redis.set(req.user?._id as string, JSON.stringify(user))
 
         await user?.save();
 
@@ -95,3 +108,63 @@ export const getAllOrdersAdmin = catchAsyncErrors(async (req: Request, res: Resp
         return next(new ErrorHandler(error.message, 400));
     };
 });
+
+// send stripe publishable key
+export const sendStripePublishableKey = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        res.status(200).json({
+            success: true,
+            stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY
+        });
+    } catch (error: any) {
+        return next(new ErrorHandler(error.message, 500));
+    }
+});
+
+// new payment
+// export const newPayment = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const myPayment = await stripe.paymentIntents.create({
+//             amount : req.body.amount,
+//             currency:"USD",
+//             metadata:{
+//                 company:"Learnify",
+//             },
+//             automatic_payment_methods:{enabled:true,}
+
+//         })
+//         res.status(200).json({
+//             success:true,
+//             client_secret:myPayment.client_secret,
+//         })
+//     } catch (error: any) {
+//         return next(new ErrorHandler(error.message, 500));
+//     }
+// });
+
+export const newPayment = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+
+    const { amount } = req.body;
+
+    if (!amount || amount <= 0) {
+      return next(new ErrorHandler("Invalid payment amount", 400));
+    }
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount * 100, // cents
+      currency: "usd",
+      metadata: {
+        company: "Learnify",
+      },
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      client_secret: paymentIntent.client_secret,
+    });
+  }
+);

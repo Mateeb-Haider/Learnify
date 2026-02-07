@@ -2,18 +2,26 @@ import { styles } from "@/app/styles/styles";
 import CoursePlayer from "@/app/utils/CoursePlayer";
 import Ratings from "@/app/utils/Ratings";
 import { AnyARecord } from "dns";
-import { Link } from "lucide-react";
-import React from "react";
+
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import CourseContentList from "../Course/CourseContentList";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckOutForm from "../Payment/CheckOutForm";
+
+import { IoClose } from "react-icons/io5";
+import Link from "next/link";
 
 type Props = {
   data: any;
+  clientSecret: string;
+  stripePromise: any;
 };
 
-const CourseDetail = ({ data }: Props) => {
+const CourseDetail = ({ data, clientSecret, stripePromise }: Props) => {
   const { user } = useSelector((state: any) => state.auth);
-  console.log(data);
+
+  const [open, setOpen] = useState(false);
   const discountedPercentagePrice = (
     (data?.estimatedPrice - data?.price) /
     data?.estimatedPrice /
@@ -24,7 +32,7 @@ const CourseDetail = ({ data }: Props) => {
     user && user?.courses?.find((item: any) => item._id === data._id);
 
   const handleOrder = (e: any) => {
-    // Logic to handle order placement
+    setOpen(true);
   };
   return (
     <div>
@@ -190,7 +198,6 @@ const CourseDetail = ({ data }: Props) => {
                     href={`/course-access/${data?._id}`}
                     className={`${styles.button} !w-[180px] font-Poppins cursor-pointer `}
                   >
-                    {" "}
                     Enter to Course
                   </Link>
                 ) : (
@@ -198,7 +205,6 @@ const CourseDetail = ({ data }: Props) => {
                     onClick={handleOrder}
                     className={`${styles.button} !w-[180px] font-Poppins`}
                   >
-                    {" "}
                     Buy Now {data?.price} $
                   </button>
                 )}
@@ -218,6 +224,34 @@ const CourseDetail = ({ data }: Props) => {
           </div>
         </div>
       </div>
+
+      <>
+        {open && (
+          <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-[90%] 800px:w-[50%] overflow-y-scroll">
+              <div className="flex justify-between">
+                <h2 className="text-2xl mb-4 text-black dark:text-white">
+                  Order Placement
+                </h2>
+                <span
+                  onClick={() => setOpen(false)}
+                  className={`flex justify-end font-bold cursor-pointer`}
+                >
+                  <IoClose size={25} />
+                </span>
+              </div>
+
+              <div className="w-full">
+                {stripePromise && clientSecret && (
+                  <Elements stripe={stripePromise} options={{ clientSecret }}>
+                    <CheckOutForm setOpen={setOpen} data={data} />
+                  </Elements>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </>
     </div>
   );
 };
