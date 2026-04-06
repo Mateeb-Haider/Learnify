@@ -11,6 +11,9 @@ import CheckOutForm from "../Payment/CheckOutForm";
 
 import { IoClose } from "react-icons/io5";
 import Link from "next/link";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import Image from "next/image";
+import { format } from "timeago.js";
 
 type Props = {
   data: any;
@@ -19,7 +22,9 @@ type Props = {
 };
 
 const CourseDetail = ({ data, clientSecret, stripePromise }: Props) => {
-  const { user } = useSelector((state: any) => state.auth);
+  const { data: userData } = useLoadUserQuery(undefined, {});
+
+  const user = userData?.user;
 
   const [open, setOpen] = useState(false);
   const discountedPercentagePrice = (
@@ -130,9 +135,9 @@ const CourseDetail = ({ data, clientSecret, stripePromise }: Props) => {
             <br />
             <br />
             <div className="w-full">
-              <div className=" 800px:flex items-center">
+              <div className="800px:flex items-center gap-3">
                 <Ratings rating={data?.ratings} />
-                <div className="mb-2 800px:mb-[unset] ">
+                <div className="mb-2 800px:mb-[unset]">
                   <h5 className="text-[25px] font-Poppins text-black dark:text-white">
                     {Number.isInteger(data?.ratings)
                       ? data?.ratings.toFixed(1)
@@ -140,16 +145,29 @@ const CourseDetail = ({ data, clientSecret, stripePromise }: Props) => {
                     Course Rating • {data?.reviews?.length} Reviews
                   </h5>
                 </div>
-                <br />
+              </div>
+
+              <div className="mt-4 space-y-4">
                 {data?.reviews &&
                   [...data?.reviews].reverse().map((item: any, index: any) => (
-                    <div key={index} className="w-full pt-2 pb-2">
+                    <div
+                      key={index}
+                      className="w-full pt-2 pb-2 border-b border-[#0000001a] dark:border-[#ffffff1f]"
+                    >
                       <div>
                         <div className="flex items-center">
-                          <h1 className="text-[18px] pr-2 text-black dark:text-white">
-                            {item.user.name.slice(0, 2)}
-                          </h1>
-                          <div>
+                          <Image
+                            src={
+                              item?.user?.avatar
+                                ? item.user.avatar.url
+                                : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqkI0Imu58AY227B29_DvKYq6Hk9Ig0t1x7e_2C5kjvQ&s&ec=121532756"
+                            }
+                            width={50}
+                            height={50}
+                            alt=""
+                            className="rounded-full w-[50px] h-[50px] object-cover"
+                          />
+                          <div  className="ml-4">
                             <h1 className="text-black dark:text-white font-[600]">
                               {item.user?.name}
                             </h1>
@@ -160,9 +178,9 @@ const CourseDetail = ({ data, clientSecret, stripePromise }: Props) => {
                           {item.comment}
                         </p>
                         <small className="text-[#000000d1] dark:text-[#ffffff83]">
-                          {
-                            // formatDate(item.createdAt)
-                          }
+                        
+                             {format(item.createdAt)}
+                       
                         </small>
                       </div>
                       <div className="pl-2 flex 800px:hidden items-center">

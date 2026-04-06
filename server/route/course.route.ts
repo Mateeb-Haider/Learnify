@@ -31,7 +31,7 @@ courseRouter.get(
 );
 
 courseRouter.get(
-    '/get-courses-content/:id',
+    '/get-course-content/:id',
 
     isAuthenticated,
     getCourseByUser
