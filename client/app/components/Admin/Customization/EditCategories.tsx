@@ -124,13 +124,9 @@ const EditCategories = (props: Props) => {
   };
 
   const handleEdit = async () => {
-    if (!data || !data.layout) {
-      toast.error("No data available");
-      return;
-    }
-
     // Check if there are changes and no empty categories
-    const hasChanges = !areCategoriesSame(data.layout.categories, categories);
+    const originalCategories = data?.layout?.categories || [];
+    const hasChanges = !areCategoriesSame(originalCategories, categories);
     const isEmpty = hasEmptyCategories(categories);
 
     if (!hasChanges) {
@@ -165,7 +161,7 @@ const EditCategories = (props: Props) => {
   }
 
   const hasChanges = data?.layout
-    ? !areCategoriesSame(data.layout.categories, categories)
+    ? !areCategoriesSame(data.layout.categories || [], categories)
     : categories.length > 0;
 
   const isValid = !hasEmptyCategories(categories);

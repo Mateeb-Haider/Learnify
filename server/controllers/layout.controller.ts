@@ -131,7 +131,11 @@ export const editLayout = catchAsyncErrors(async (req: Request, res: Response, n
                     };
                 })
             );
-            await LayoutModel.findByIdAndUpdate(CategoryItem?._id, { type: "Categories", categories: cetegoriesItems });
+            if (CategoryItem) {
+                await LayoutModel.findByIdAndUpdate(CategoryItem._id, { type: "Categories", categories: cetegoriesItems });
+            } else {
+                await LayoutModel.create({ type: "Categories", categories: cetegoriesItems });
+            }
 
         }
 
