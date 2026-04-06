@@ -413,7 +413,10 @@ export const addReplyToReview = catchAsyncErrors(
         review.commentReplies = [];
       }
       review.commentReplies?.push(replyData);
+
       await course.save();
+      await redis.set(courseId, JSON.stringify(course), "EX", 604800);
+
 
 
       res.status(200).json({

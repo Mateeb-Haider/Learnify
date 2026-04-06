@@ -138,7 +138,7 @@ const CourseDetail = ({ data, clientSecret, stripePromise }: Props) => {
               <div className="800px:flex items-center gap-3">
                 <Ratings rating={data?.ratings} />
                 <div className="mb-2 800px:mb-[unset]">
-                  <h5 className="text-[25px] font-Poppins text-black dark:text-white">
+                  <h5 className="text-[20px] font-Poppins text-black dark:text-white">
                     {Number.isInteger(data?.ratings)
                       ? data?.ratings.toFixed(1)
                       : data?.ratings.toFixed(2)}{" "}

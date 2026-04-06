@@ -18,7 +18,8 @@ const CourseContent = ({ id, user }: Props) => {
     isLoading,
     refetch,
   } = useGetCourseContentQuery(id, { refetchOnMountOrArgChange: true });
-  const data = contentData?.content;
+  const data = contentData?.content || [];
+  const hasContent = data.length > 0;
   const [activeVideo, setActiveVideo] = useState(0);
   const [open, setOpen] = useState(false);
   const [route, setRoute] = useState("Login");
@@ -36,29 +37,37 @@ const CourseContent = ({ id, user }: Props) => {
             setRoute={setRoute}
           />
           <div className=" w-full grid 800px:grid-cols-10">
-            <Heading
-              title={data[activeVideo]?.title}
-              description="anything"
-              keywords={data[activeVideo]?.tags}
-            />
-            <div className=" col-span-7">
-              <CourseContentMedia
-                data={data}
-                id={id}
-                activeVideo={activeVideo}
-                setActiveVideo={setActiveVideo}
-                user={user}
-                refetch={refetch}
-              />
+            {hasContent ? (
+              <>
+                <Heading
+                  title={data[activeVideo]?.title}
+                  description="anything"
+                  keywords={data[activeVideo]?.tags}
+                />
+                <div className=" col-span-7">
+                  <CourseContentMedia
+                    data={data}
+                    id={id}
+                    activeVideo={activeVideo}
+                    setActiveVideo={setActiveVideo}
+                    user={user}
+                    refetch={refetch}
+                  />
+                </div>
+                <div className="hidden 800px:block 800px:col-span-3">
+                  <CourseContentList
+                    setActiveVideo={setActiveVideo}
+                    data={data}
+                    activeVideo={activeVideo}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="col-span-10 text-center py-10 text-black dark:text-white">
+                No course content available.
+              </div>
+            )}
             </div>
-            <div className="hidden 800px:block 800px:col-span-3">
-              <CourseContentList
-                setActiveVideo={setActiveVideo}
-                data={data}
-                activeVideo={activeVideo}
-              />
-            </div>
-          </div>
         </>
       )}
     </>

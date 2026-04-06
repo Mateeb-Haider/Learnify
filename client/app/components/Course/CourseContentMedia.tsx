@@ -4,6 +4,7 @@ import Ratings from "@/app/utils/Ratings";
 import {
   useAddAnswerInQuestionMutation,
   useAddNewQuestionMutation,
+  useAddReplyInReviewMutation,
   useAddReviewInCourseMutation,
   useGetCourseDetailsQuery,
 } from "@/redux/features/courses/coursesApi";
@@ -40,11 +41,12 @@ const CourseContentMedia = ({
   const [activeBar, setActiveBar] = useState(0);
   const [question, setQuestion] = useState("");
   const [review, setReview] = useState("");
-
   const [rating, setRating] = useState(0);
-
   const [answer, setAnswer] = useState("");
   const [questionId, setQuestionId] = useState("");
+  const [isReviewReply, setIsReviewReply] = useState(false);
+  const [reply, setReply] = useState("");
+  const [reviewId, setReviewId] = useState("");
 
   const { data: courseData, refetch: courseRefetch } = useGetCourseDetailsQuery(
     { id },
@@ -69,6 +71,11 @@ const CourseContentMedia = ({
       error: reviewError,
     },
   ] = useAddReviewInCourseMutation();
+
+  const [
+    addReplyInReview,
+    { isSuccess: replySuccess, error: replyError, isLoading: replyLoading },
+  ] = useAddReplyInReviewMutation();
 
   const isReviewExist = course?.reviews?.find(
     (item: any) => item.user._id === user._id,
@@ -101,6 +108,19 @@ const CourseContentMedia = ({
       setReview("");
       courseRefetch();
     }
+    if (replySuccess) {
+      toast.success("Reply added successfully");
+      setReply("");
+      setIsReviewReply(false);
+      setReviewId("");
+      courseRefetch();
+    }
+    if (replyError) {
+      if ("data" in replyError) {
+        const errorMessage = replyError as any;
+        toast.error(errorMessage?.data.message);
+      }
+    }
     if (reviewError) {
       if ("data" in reviewError) {
         const errorMessage = reviewError as any;
@@ -128,6 +148,8 @@ const CourseContentMedia = ({
     courseRefetch,
     reviewSuccess,
     reviewError,
+    replySuccess,
+    replyError,
   ]);
 
   const handleAnswerSubmit = () => {
@@ -144,6 +166,18 @@ const CourseContentMedia = ({
       toast.error("Review can't be empty");
     } else {
       addReviewInCourse({ review, rating, courseId: id });
+    }
+  };
+  const handleReviewReplySubmit = async () => {
+    if (reply.length === 0) {
+      toast.error("Reply can't be empty");
+    } else {
+      console.log("Helloworld");
+      addReplyInReview({
+        comment: reply,
+        courseId: id,
+        reviewId: reviewId,
+      });
     }
   };
 
@@ -277,7 +311,7 @@ const CourseContentMedia = ({
       )}
 
       {activeBar === 3 && (
-        <div className="w-full">
+        <div className="w-full text-black dark:text-white">
           <>
             {!isReviewExist && (
               <>
@@ -364,22 +398,108 @@ const CourseContentMedia = ({
                           alt=""
                           className="rounded-full w-[50px] h-[50px] object-cover"
                         />
-                      <div className="ml-5 ">  <h1 className="text-[20px] dark:text-white text-black ">
-                          {item?.user.name}
-                        </h1>
-                           <Ratings rating={item.rating} /></div>
+                        <div className="ml-5 ">
+                          {" "}
+                          <h1 className="text-[20px] dark:text-white text-black ">
+                            {item?.user.name}
+                          </h1>
+                          <Ratings rating={item.rating} />
+                        </div>
                       </div>
-                  
+
                       <div className="ml-16 mt-1">
-                        
                         <h3 className=" text-black dark:text-white text-[17px]">
                           {item.comment}
                         </h3>
-                      
+
                         <small className=" text-black dark:text-[#ffffff83]">
                           {format(item.createdAt)}
                         </small>
+                        <br />
+                        {user.role === "admin" && (
+                          <span
+                            onClick={() => {
+                              const clickedReviewId = item._id?.toString();
+                              if (
+                                isReviewReply &&
+                                reviewId === clickedReviewId
+                              ) {
+                                setIsReviewReply(false);
+                                setReviewId("");
+                                setReply("");
+                              } else {
+                                setReviewId(clickedReviewId);
+                                setIsReviewReply(true);
+                              }
+                            }}
+                            className={`  dark:text-white text-black cursor-pointer`}
+                          >
+                            {" "}
+                            {isReviewReply &&
+                            reviewId === item._id?.toString()
+                              ? "Hide Reply"
+                              : "Add Reply"}{" "}
+                          </span>
+                        )}
                       </div>
+                      {isReviewReply && reviewId === item._id?.toString() && (
+                        <div className=" w-full flex  relative dark:text-white text-black">
+                          <input
+                            type="text"
+                            placeholder="Enter Your Reply ..."
+                            value={reply}
+                            onChange={(e: any) => setReply(e.target.value)}
+                            className=" block 800px:ml-12 mt-2 outline-none bg-transparent border-b dark:border-[#fff] border-black dark:text-white text-black p-[5px] w-[95%]"
+                          />
+                          <button
+                            type="submit"
+                            onClick={
+                              replyLoading ? () => {} : handleReviewReplySubmit
+                            }
+                            className="  rignt-0 bottom-1"
+                          >
+                            {" "}
+                            Submit
+                          </button>
+                        </div>
+                      )}
+
+                      {item.commentReplies.map((i: any, index: number) => (
+                        <div
+                          key={index}
+                          className="w-full flex 800px:ml-16 my-5 text-black dark:text-white"
+                        >
+                          <div>
+                            <Image
+                              src={
+                                i?.user?.avatar
+                                  ? i.user.avatar.url
+                                  : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqkI0Imu58AY227B29_DvKYq6Hk9Ig0t1x7e_2C5kjvQ&s&ec=121532756"
+                              }
+                              width={50}
+                              height={50}
+                              alt=""
+                              className="rounded-full w-[50px] h-[50px] object-cover"
+                            />
+                          </div>
+                          <div className="pl-3">
+                            <div className="flex">
+                              <h5 className="text-[20px] dark:text-white text-black ">
+                                {i?.user.name}
+                              </h5>
+                            
+                                <VscVerifiedFilled className="mt-2 text-[#50c750]  ml-2 text-[20px]" />
+                           
+                            </div>
+                            <p className="dark:text-white text-black">
+                              {i.comment}{" "}
+                            </p>
+                            <small className=" text-black dark:text-[#ffffff83]">
+                              {format(i.createdAt)}
+                            </small>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   ))}
             </div>
