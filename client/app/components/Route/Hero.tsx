@@ -1,31 +1,40 @@
 import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 import Image from "next/image";
 import Link from "next/link";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Search, Users, ArrowRight, Sparkles } from "lucide-react";
+import Loader from "../Loader/Loader";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 const Hero: FC<Props> = (props) => {
   const { data, isLoading } = useGetHeroDataQuery("Banner", {});
-  
-  const studentAvatars = [
-    "/assets/s1.jpg",
-    "/assets/s2.jpg", 
-    "/assets/s3.jpg"
-  ];
+  const[search, setSearch] = useState("");
+  const router = useRouter();  
+
+
+
+  const studentAvatars = ["/assets/s1.jpg", "/assets/s2.jpg", "/assets/s3.jpg"];
 
   if (isLoading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#37a39a]"></div>
-      </div>
-    );
+    return <Loader />;
+  }
+
+  const handleSearch = () =>{
+if(search===""){
+  return;
+}else{
+router.push(`/course?title=${search}`)
+}
   }
 
   return (
-     <div className="w-full min-h-screen pt-[80px] pb-20 font-poppins transition-colors font-Poppins duration-300 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900" suppressHydrationWarning>
-      <div className='w-[95%] md:w-[85%] mx-auto'>
+    <div
+      className="w-full min-h-screen pt-[80px] pb-20 font-poppins transition-colors font-Poppins duration-300 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900"
+      suppressHydrationWarning
+    >
+      <div className="w-[95%] md:w-[85%] mx-auto">
         <div className="flex flex-col lg:flex-row items-center justify-between py-8 lg:py-12">
           {/* Left Content */}
           <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left mb-8 lg:mb-0 lg:pr-8">
@@ -44,7 +53,8 @@ const Hero: FC<Props> = (props) => {
 
             {/* Subtitle */}
             <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 mb-6 max-w-lg">
-              {data?.layout?.banner?.subTitle || "Start your learning journey with expert-led courses."}
+              {data?.layout?.banner?.subTitle ||
+                "Start your learning journey with expert-led courses."}
             </p>
 
             {/* Search Bar */}
@@ -54,9 +64,11 @@ const Hero: FC<Props> = (props) => {
                 <input
                   type="search"
                   placeholder="Search courses..."
+                  value={search}
+                  onChange={(e:any)=>setSearch(e.target.value)}
                   className="w-full pl-10 pr-28 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#37a39a] dark:focus:ring-[#2d8b7f] focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm"
                 />
-                <button className="absolute right-1.5 top-1/2 transform -translate-y-1/2 px-4 py-1.5 bg-gradient-to-r from-[#37a39a] to-[#2d8b7f] text-white font-medium rounded-md hover:from-[#2d8b7f] hover:to-[#1f6b5f] transition-all duration-300 text-sm">
+                <button onClick={handleSearch} className="absolute right-1.5 top-1/2 transform -translate-y-1/2 px-4 py-1.5 bg-gradient-to-r from-[#37a39a] to-[#2d8b7f] text-white font-medium rounded-md hover:from-[#2d8b7f] hover:to-[#1f6b5f] transition-all duration-300 text-sm">
                   Search
                 </button>
               </div>
@@ -66,8 +78,8 @@ const Hero: FC<Props> = (props) => {
             <div className="flex items-center gap-3">
               <div className="flex -space-x-3">
                 {studentAvatars.map((avatar, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className="w-8 h-8 rounded-full border-2 border-white dark:border-gray-800 overflow-hidden"
                   >
                     <Image
@@ -117,11 +129,15 @@ const Hero: FC<Props> = (props) => {
 
               {/* Decorative Elements */}
               <div className="absolute -top-2 -right-2 bg-white dark:bg-gray-800 px-3 py-1 rounded-full shadow-md">
-                <span className="text-xs font-medium text-gray-900 dark:text-white">✨ Certified</span>
+                <span className="text-xs font-medium text-gray-900 dark:text-white">
+                  ✨ Certified
+                </span>
               </div>
 
               <div className="absolute -bottom-2 -left-2 bg-white dark:bg-gray-800 px-3 py-1 rounded-full shadow-md">
-                <span className="text-xs font-medium text-gray-900 dark:text-white">🎓 Expert</span>
+                <span className="text-xs font-medium text-gray-900 dark:text-white">
+                  🎓 Expert
+                </span>
               </div>
             </div>
           </div>

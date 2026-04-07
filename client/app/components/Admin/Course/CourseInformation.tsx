@@ -2,6 +2,7 @@
 import { styles } from "@/app/styles/styles";
 import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 import React, { FC, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 type Props = {
   courseInfo: any;
@@ -20,15 +21,21 @@ const CourseInformation: FC<Props> = ({
     refetchOnMountOrArgChange: true,
   });
 
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
-    setCategories(data?.layout?.categories);
+    setCategories(data?.layout?.categories || []);
   }, [data]);
   const [dragging, setDragging] = useState(false);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+
+    if (!courseInfo.categories) {
+      toast.error("Please select a category");
+      return;
+    }
+
     setActive(active + 1);
   };
 
@@ -160,9 +167,13 @@ const CourseInformation: FC<Props> = ({
           <select
             className={`${styles.input} dark:!bg-black !rounded-lg`}
             name=""
+            required
             value={courseInfo.categories}
             onChange={(e: any) =>
-              setCourseInfo({ ...courseInfo, categories: e.target.value })
+              setCourseInfo((prev: any) => ({
+                ...prev,
+                categories: e.target.value,
+              }))
             }
             id=""
           >
