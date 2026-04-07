@@ -3,7 +3,7 @@ import CoursePlayer from "@/app/utils/CoursePlayer";
 import Ratings from "@/app/utils/Ratings";
 import { AnyARecord } from "dns";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CourseContentList from "../Course/CourseContentList";
 import { Elements } from "@stripe/react-stripe-js";
@@ -14,19 +14,24 @@ import Link from "next/link";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import Image from "next/image";
 import { format } from "timeago.js";
+import toast from "react-hot-toast";
 
 type Props = {
   data: any;
   clientSecret: string;
   stripePromise: any;
+  setRoute:any;
+  setOpen:any;
 };
 
-const CourseDetail = ({ data, clientSecret, stripePromise }: Props) => {
+const CourseDetail = ({ data, clientSecret, stripePromise, setOpen:openAuthModel, setRoute }: Props) => {
   const { data: userData } = useLoadUserQuery(undefined, {});
 
-  const user = userData?.user;
-
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<any>();
+  useEffect(()=>{
+  setUser(userData?.user);
+  },[userData])
   const discountedPercentagePrice = (
     (data?.estimatedPrice - data?.price) /
     data?.estimatedPrice /
@@ -37,7 +42,14 @@ const CourseDetail = ({ data, clientSecret, stripePromise }: Props) => {
     user && user?.courses?.find((item: any) => item._id === data._id);
 
   const handleOrder = (e: any) => {
-    setOpen(true);
+    if(user){
+      setOpen(true);
+    }
+    else{
+      setRoute("Login");
+      toast.error("Please Login to buy the course!")
+      openAuthModel(true);
+    }
   };
   return (
     <div>
