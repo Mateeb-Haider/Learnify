@@ -48,6 +48,7 @@ const EditCourse: FC<Props> = ({ id }) => {
       setCourseInfo({
         name: editCourseData.name,
         description: editCourseData?.description,
+        categories:editCourseData?.categories,
         price: editCourseData?.price,
         estimatedPrice: editCourseData?.estimatedPrice,
         tags: editCourseData?.tags,
@@ -63,6 +64,7 @@ const EditCourse: FC<Props> = ({ id }) => {
   const [courseInfo, setCourseInfo] = useState({
     name: "",
     description: "",
+    categories:"",
     price: "",
     estimatedPrice: "",
     tags: "",
@@ -89,18 +91,15 @@ const EditCourse: FC<Props> = ({ id }) => {
   ]);
   const [courseData, setCourseData] = useState({});
 
-  const handleSubmit = async () => {
-    // Format beneifits data
+  const buildCoursePayload = () => {
     const formattedBenifits = benefits.map((benefit) => ({
       title: benefit.title,
     }));
 
-    // Foemate prerequisites
     const formattedPrerequisites = prerequisites.map((prerequisite) => ({
       title: prerequisite.title,
     }));
 
-    // formate course content data
     const formattedCourseConetentData = courseContentData.map(
       (courseContent) => ({
         videoUrl: courseContent.videoUrl,
@@ -115,10 +114,10 @@ const EditCourse: FC<Props> = ({ id }) => {
       })
     );
 
-    //  Prepare our data object
-    const data = {
+    return {
       name: courseInfo.name,
       description: courseInfo.description,
+      categories: courseInfo.categories,
       price: Number(courseInfo.price),
       estimatedPrice: Number(courseInfo.estimatedPrice),
       tags: courseInfo.tags,
@@ -129,13 +128,17 @@ const EditCourse: FC<Props> = ({ id }) => {
       prerequisites: formattedPrerequisites,
       courseData: formattedCourseConetentData,
     };
-    setCourseData(data);
+  };
+
+  const handleSubmit = async () => {
+    setCourseData(buildCoursePayload());
   };
 
   const handleCourseCreate = async (e: any) => {
-    const data = courseData;
+    const data = buildCoursePayload();
     await editCourse({ id, data });
   };
+  console.log(data)
 
   return (
     <div className="w-full flex min-h-screen">
