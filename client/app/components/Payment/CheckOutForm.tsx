@@ -54,7 +54,7 @@ const CheckOutForm: FC<Props> = ({ setOpen, data, user }) => {
 
       socketId.emit("notification",{
         title:"New Order",
-        message:`You have a new order from ${data.course.name}`,
+        message:`You have a new order from ${data?.course?.name}`,
         userId:user._id
       })
       redirect(`/course-access/${data._id}`);
