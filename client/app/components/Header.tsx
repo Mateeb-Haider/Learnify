@@ -49,29 +49,37 @@ const Header: FC<Props> = ({ activeItem, open, setOpen, route, setRoute }) => {
       }
     }
 
-    // Show success toast when social auth completed and session is available
-    if (data && isSuccess) {
-      toast.success("Login Successful");
-    }
-  }, [data, user, socialAuth, isSuccess]);
+     // Show success toast when social auth completed and session is available
+  //  if (data && isSuccess) {
+  //     toast.success("Login Successful");
+  //   }
+  }, [data, userData, socialAuth, isSuccess, refetch]);
 
-  if (typeof window !== "undefined") {
-    window.addEventListener("scroll", () => {
+  useEffect(() => {
+    const handleScroll = () => {
       if (window.scrollY > 85) {
         setActive(true);
       } else {
         setActive(false);
       }
-    });
-  }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   const handleClose = (e: any) => {
     if (e.target.id === "screen") {
       setOpenSidebar(false);
     }
   };
-  if(data === null && !isLoading && !userData){
-    setLogout(true);
-  }
+  useEffect(() => {
+    if (data === null && !isLoading && !userData && !logout) {
+      setLogout(true);
+    }
+  }, [data, isLoading, userData, logout]);
 
   return (
     <div className=" w-full relative ">
