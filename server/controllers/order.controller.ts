@@ -7,7 +7,7 @@ import userModel, { IUser } from "../models/user.model";
 import ejs from "ejs";
 import path from "path";
 import sendMail from "../utils/sendMail";
-import CourseModel from "../models/course.model";
+import CourseModel, { ICourse } from "../models/course.model";
 import { getAllOrdersService, newOrder } from "../services/order.service";
 import NotificationModel from "../models/notification.model";
 import { redis } from "../utils/redis";
@@ -36,7 +36,7 @@ export const createOrder = catchAsyncErrors(async (req: Request, res: Response, 
             return next(new ErrorHandler("You Already Have This Course", 400));
         }
 
-        const course = await CourseModel.findById(courseId);
+        const course:ICourse | null = await CourseModel.findById(courseId);
 
         if (!course) {
             return next(new ErrorHandler("Course Not Found", 404));
@@ -85,9 +85,9 @@ export const createOrder = catchAsyncErrors(async (req: Request, res: Response, 
             message: `You have a new order from ${course?.name}`
 
         });
-        if (course.purchased) {
-            course.purchased += 1;
-        }
+      
+            course.purchased =  course?.purchased + 1;
+    
         await course.save();
 
         newOrder(data, res, next);
