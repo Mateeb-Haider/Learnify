@@ -8,6 +8,7 @@ import orderRouter from "./route/order.route";
 import notificationRouter from "./route/notification.route";
 import analyticsRouter from "./route/analytics.route";
 import layoutRouter from "./route/layout.route";
+import { rateLimit } from 'express-rate-limit'
 
 
 export const app = express();
@@ -29,10 +30,20 @@ app.use(cors({
 // Explicitly handle preflight requests
 app.options('*', cors());
 
+
+
 // routes
 app.use('/api/v1', userRouter, courseRouter, orderRouter, notificationRouter, analyticsRouter, layoutRouter);
 
-
+// Api request limit
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, 
+	limit: 100, 
+	standardHeaders: 'draft-8', 
+	legacyHeaders: false, 
+	ipv6Subnet: 56, 
+	
+})
 
 
 // test api
@@ -49,5 +60,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     err.statusCode = 404;
     next(err);
 });
+app.use(limiter)
 
 app.use(ErrorMiddleware);

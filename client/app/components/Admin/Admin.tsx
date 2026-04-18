@@ -65,7 +65,7 @@ const Admin = ({ isDashboard = false }: Props) => {
             Admin Dashboard
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
-            Welcome back! Here's what's happening with your store today.
+            Welcome back! Here&apos;s what&apos;s happening with your store today.
           </p>
         </div>
       )}

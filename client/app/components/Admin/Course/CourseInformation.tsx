@@ -1,6 +1,7 @@
 "use client";
 import { styles } from "@/app/styles/styles";
 import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
+import Image from "next/image";
 import React, { FC, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -242,7 +243,7 @@ const CourseInformation: FC<Props> = ({
             onDrop={handleDrop}
           >
             {courseInfo.thumbnail ? (
-              <img
+              <Image
                 src={courseInfo.thumbnail}
                 alt=""
                 className="object-cover max-h-full w-full"

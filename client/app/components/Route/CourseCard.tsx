@@ -1,5 +1,6 @@
 import Ratings from '@/app/utils/Ratings'
 import { Users } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import React, { FC } from 'react'
 
@@ -16,7 +17,7 @@ const CourseCard  : FC<Props> = ({ item, isProfile = false  }) => {
   <Link href={`/course/${item._id}`}>
 
     <div className='relative h-48 overflow-hidden'>
-      <img 
+      <Image
         src={item?.thumbnail?.url} 
         alt={item.name || item.title}
         className='w-full h-full object-cover transition-transform duration-300 hover:scale-105'

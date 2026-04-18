@@ -8,11 +8,9 @@ import Profile from "../components/Profile/Profile";
 import { useSelector } from "react-redux";
 import Footer from "../components/Route/Footer";
 
-type Props = {
-  user: any;
-};
 
-const page: FC<Props> = (props) => {
+
+const Page=() => {
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState(5);
   const [route, setRoute] = useState("Login");
@@ -39,4 +37,4 @@ const page: FC<Props> = (props) => {
   );
 };
 
-export default page;
+export default Page;

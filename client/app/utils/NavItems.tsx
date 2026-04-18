@@ -27,9 +27,10 @@ export const navItemsData = [
 type Props = {
   activeItem: number;
   isMobile: boolean;
+  onItemClick?: () => void;
 };
 
-const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
+const NavItems: React.FC<Props> = ({ activeItem, isMobile, onItemClick }) => {
   return (
     <>
       <div className="hidden 800px:flex">
@@ -52,7 +53,7 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
         <div className="800px:hidden mt-5">
           {navItemsData &&
             navItemsData.map((i, index) => (
-              <Link href="/" passHref key={index}>
+              <Link href={i.url} key={index} onClick={onItemClick}>
                 <span
                   className={`${
                     activeItem === index

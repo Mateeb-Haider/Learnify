@@ -12,7 +12,7 @@ const About = () => {
             LEARNIFY
           </span>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mt-4 mb-6 tracking-tight">
-            We're making online learning <br />
+            We&apos;re making online learning <br />
             <span className="text-blue-600 dark:text-blue-400">actually work</span>
           </h1>
           <p className="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">

@@ -160,15 +160,36 @@ const Header: FC<Props> = ({ activeItem, open, setOpen, route, setRoute }) => {
                   Learnify
                 </Link>
               </div>
-              <NavItems activeItem={activeItem} isMobile={true} />
-              <FaRegUserCircle
-                size={25}
-                className="cursor-pointer ml-4 dark:text-white text-black"
-                onClick={() => setOpen(true)}
+              <NavItems
+                activeItem={activeItem}
+                isMobile={true}
+                onItemClick={() => setOpenSidebar(false)}
               />
+                {userData ? (
+                <>
+                  <Link href="/profile">
+                    <Image
+                      src={userData.avatar ? userData.avatar.url : avatar}
+                      alt=""
+                      height={40}
+                      width={40}
+                      className="h-[40px] w-[40px] dark:bg-white dark:rounded-full"
+                      style={{
+                        border: activeItem === 5 ? "2px solid #37a39a" : "none",
+                      }}
+                    />
+                  </Link>
+                </>
+              ) : (
+                <FaRegUserCircle
+                  size={25}
+                  className="hidden 800px:block cursor-pointer dark:text-white text-black"
+                  onClick={() => setOpen(true)}
+                />
+              )}
               <br />
               <br />
-              <p className="ml-4 dark:text-white text-black">Copyright text</p>
+              <p className="ml-4 dark:text-white text-black">© 2026 Learnify.</p>
             </div>
           </div>
         )}

@@ -7,6 +7,7 @@ import React, { FC, useEffect, useState, useRef, useCallback } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import toast from "react-hot-toast";
 import Loader from "../../Loader/Loader";
+import Image from "next/image";
 
 interface HeroData {
   title: string;
@@ -222,7 +223,7 @@ const EditHero: FC = () => {
                   `}
                   >
                     {image ? (
-                      <img
+                      <Image
                         src={image}
                         alt="Hero Banner Preview"
                         className="w-full h-full object-cover"

@@ -173,7 +173,6 @@ const OrdersAnalytics = ({ isDashboard = false }: Props) => {
                           color: "#1f2937",
                           fontSize: isDashboard ? "12px" : "14px",
                         }}
-                        className="dark:bg-slate-800 dark:border-slate-700 dark:text-white"
                       />
                       {!isDashboard && (
                         <Legend verticalAlign="top" height={36} />

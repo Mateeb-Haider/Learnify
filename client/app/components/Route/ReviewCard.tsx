@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import { Star, Calendar, Quote } from 'lucide-react'
+import Image from 'next/image'
 
 type Props = {
   review: any
@@ -34,7 +35,7 @@ const ReviewCard: FC<Props> = ({ review }) => {
       {/* Header */}
       <div className='flex items-center gap-4 mb-5'>
         <div className='relative'>
-          <img 
+          <Image 
             src={review.avatar} 
             alt={review.name}
             className='w-14 h-14 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-md'
