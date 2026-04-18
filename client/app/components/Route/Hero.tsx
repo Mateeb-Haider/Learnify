@@ -111,7 +111,7 @@ router.push(`/courses?title=${search}`)
           <div className="w-full lg:w-1/2 flex justify-center lg:justify-end mt-8 lg:mt-0">
             <div className="relative w-[300px] h-[300px] sm:w-[250px] sm:h-[250px] lg:w-[400px] lg:h-[400px]">
               {/* Main Circular Image */}
-              <div className="absolute inset-0 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
+              <div className="absolute inset-0 rounded-lg overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
                 {data?.layout?.banner?.image?.url ? (
                   <Image
                     src={data.layout.banner.image.url}
