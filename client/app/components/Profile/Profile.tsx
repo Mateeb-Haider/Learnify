@@ -1,10 +1,12 @@
 "use client";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import SideBarProfile from "./SideBarProfile";
 import { useLogoutQuery } from "../../../redux/features/auth/authApi";
 import { signOut } from "next-auth/react";
 import ProfileInfo from "./ProfileInfo";
 import ChangePassword from "./ChangePassword";
+import CourseCard from "../Route/CourseCard";
+import { useGetAllCoursesByUserQuery } from "@/redux/features/courses/coursesApi";
 type Props = {
   user: any;
 };
@@ -14,6 +16,8 @@ const Profile: FC<Props> = ({ user }) => {
   const [avatar, setAvatar] = useState(null);
   const [active, setActive] = useState(1);
   const [logout, setLogout] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const { data, isLoading } = useGetAllCoursesByUserQuery(undefined, {});
   const {} = useLogoutQuery(undefined, { skip: !logout ? true : false });
 
   const logOutHandler = async () => {
@@ -30,6 +34,17 @@ const Profile: FC<Props> = ({ user }) => {
       }
     });
   }
+  useEffect(() => {
+    if (data) {
+      const filteredCourses = user.courses
+        .map((userCourse: any) =>
+          data.courses.find((course: any) => course._id === userCourse._id),
+        )
+        .filter((course: any) => course !== undefined);
+
+      setCourses(filteredCourses);
+    }
+  }, [data, user]);
 
   return (
     <div className="w-[85%] flex mx-auto">
@@ -54,6 +69,21 @@ const Profile: FC<Props> = ({ user }) => {
       {active === 2 && (
         <div className="w-full h-full bg-transparent mt-[80px]">
           <ChangePassword user={user} />
+        </div>
+      )}
+      {active === 3 && (
+        <div className=" ml-5 w-full h-full bg-transparent mt-[80px]">
+     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {courses &&
+                courses.map((item: any, index: number) => (
+                  <CourseCard item={item} key={index} />
+                ))}
+            </div>
+          {courses.length === 0 && (
+            <h1 className="text-center text-[18px] font-Poppins">
+              You don&apos;t have any purchased courses
+            </h1>
+          )}
         </div>
       )}
     </div>

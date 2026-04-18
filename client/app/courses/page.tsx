@@ -8,6 +8,7 @@ import Header from "../components/Header";
 import Heading from "../utils/Heading";
 import { styles } from "../styles/styles";
 import CourseCard from "../components/Route/CourseCard";
+import Footer from "../components/Route/Footer";
 
 type Props = {};
 
@@ -102,6 +103,7 @@ const Page = (props: Props) => {
                 ))}
             </div>
           </div>
+          <Footer />
         </>
       )}
     </div>
