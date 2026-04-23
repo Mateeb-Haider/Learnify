@@ -4,7 +4,7 @@ import { IUser } from "./user.model";
 export interface IComment extends Document {
     user: IUser;
     question: string;
-    questionReplies?: [];
+    questionReplies?: any[];
 }
 
 interface IReview extends Document {
