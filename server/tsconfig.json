@@ -1,13 +1,27 @@
+// {
+//   "compilerOptions": {
+//     "target": "ES2020",
+//     "module": "commonjs",
+//     "esModuleInterop": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "strict": true,
+//     "skipLibCheck": true,
+//     "outDir": "./build",
+//     "rootDir": "../server"
+//   },
+//   "include": ["**/*.ts"],
+//   "exclude": ["node_modules", "dist"]
+// }
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "nodenext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./build",
-    "rootDir": "../server"
+    "rootDir": "."
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
