@@ -18,6 +18,7 @@
     "@stripe/react-stripe-js": "^5.4.1",
     "@stripe/stripe-js": "^8.6.1",
     "axios": "^1.13.2",
+    "bufferutil": "^4.1.0",
     "formik": "^2.4.9",
     "lucide-react": "^0.561.0",
     "next": "13.5.11",
@@ -33,6 +34,7 @@
     "socket.io-client": "^4.8.3",
     "stripe": "^22.0.0",
     "timeago.js": "^4.0.2",
+    "utf-8-validate": "^6.0.6",
     "yup": "^1.7.1"
   },
   "devDependencies": {
