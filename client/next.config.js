@@ -1,9 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["res.cloudinary.com", "encrypted-tbn0.gstatic.com"],
+    domains: [
+      "res.cloudinary.com",
+      "encrypted-tbn0.gstatic.com",
+      "randomuser.me"  
+    ],
   },
-  // ✅ ADD THIS SECTION for API proxying
+
   async rewrites() {
     return [
       {

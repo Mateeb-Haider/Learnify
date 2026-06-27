@@ -26,7 +26,7 @@ const ReviewCard: FC<Props> = ({ review }) => {
   }
 
   return (
-    <div className='group p-6 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/50 dark:bg-gray-800/30 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1'>
+    <div className='group p-6 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/50 dark:bg-gray-800/30 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 relative'>
       {/* Quote Icon */}
       <div className='absolute -top-2 -right-2 opacity-10 group-hover:opacity-20 transition-opacity duration-300'>
         <Quote className='w-12 h-12 text-blue-500 dark:text-blue-400' />
@@ -34,12 +34,14 @@ const ReviewCard: FC<Props> = ({ review }) => {
       
       {/* Header */}
       <div className='flex items-center gap-4 mb-5'>
-        <div className='relative'>
+        <div className='relative w-14 h-14 flex-shrink-0'>
           <Image 
             src={review.avatar} 
             alt={review.name}
-            className='w-14 h-14 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-md'
+            fill
+            className='rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-md'
             onError={(e) => {
+              // @ts-ignore - fallback to avatar generator
               e.currentTarget.src = `https://ui-avatars.com/api/?name=${review.name}&background=random`
             }}
           />
@@ -77,15 +79,9 @@ const ReviewCard: FC<Props> = ({ review }) => {
 
       {/* Review Content */}
       <div className='relative'>
-        <div className='absolute -left-1 top-0 text-blue-500/30 dark:text-blue-400/30'>
-          
-        </div>
         <p className='text-sm leading-relaxed text-gray-700 dark:text-gray-300 pl-3 italic line-clamp-4'>
           {review.comment}
         </p>
-        <div className='absolute -right-1 bottom-0 text-blue-500/30 dark:text-blue-400/30'>
-          
-        </div>
       </div>
 
       {/* Decorative Bottom Border */}
