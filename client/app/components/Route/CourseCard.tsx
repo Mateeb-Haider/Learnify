@@ -20,6 +20,7 @@ const CourseCard  : FC<Props> = ({ item, isProfile = false  }) => {
       <Image
         src={item?.thumbnail?.url} 
         alt={item.name || item.title}
+        fill
         className='w-full h-full object-cover transition-transform duration-300 hover:scale-105'
       />
       <div className='absolute top-4 right-4 bg-[#37a39a] text-white px-3 py-1 rounded-full text-sm font-semibold'>

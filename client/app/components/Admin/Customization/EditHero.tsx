@@ -226,6 +226,7 @@ const EditHero: FC = () => {
                       <Image
                         src={image}
                         alt="Hero Banner Preview"
+                        fill
                         className="w-full h-full object-cover"
                         onLoad={() => setIsImageUploading(false)}
                         onError={() => {
