@@ -22,9 +22,9 @@ app.use(cookieParser());
 // cors =>cross origin resource sharing
 app.use(cors({
     origin: [
-        'http://localhost:3000',
-        'https://learnify-learnify.vercel.app', 
-        'http://32.236.17.105:8000'              
+    'http://localhost:3000',
+    'https://learnify-learnify.vercel.app', 
+    'http://32.236.17.105:8000'              
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
