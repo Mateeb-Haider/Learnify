@@ -7,7 +7,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://32.236.17.105:8000/api/v1/:path*',
+        destination: 'https://learnify-lms.duckdns.org/api/v1/:path*',
       },
     ];
   },
