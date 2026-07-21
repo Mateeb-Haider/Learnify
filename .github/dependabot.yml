@@ -1,39 +1,23 @@
 version: 2
 updates:
-  # Enable version updates for npm in the client folder
+  # Client dependencies
   - package-ecosystem: "npm"
     directory: "/client"
     schedule:
       interval: "daily"
     assignees:
       - "Mateeb-Haider"
-    # Optional: Group dependencies into one PR
-    groups:
-      client-dependencies:
-        patterns:
-          - "*"
-        update-types:
-          - "patch"
-          - "minor"
+    labels:
+      - "dependencies"
+      - "client"
 
-  # Enable version updates for npm in the server folder
+  # Server dependencies
   - package-ecosystem: "npm"
     directory: "/server"
     schedule:
       interval: "daily"
     assignees:
       - "Mateeb-Haider"
-    # Optional: Group dependencies into one PR
-    groups:
-      server-dependencies:
-        patterns:
-          - "*"
-        update-types:
-          - "patch"
-          - "minor"
-
-  # Enable version updates for GitHub Actions (if you have any)
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "server"
