@@ -33,7 +33,7 @@
     "express-rate-limit": "^8.3.2",
     "ioredis": "^5.8.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.2",
+    "mongoose": "^9.8.0",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.10",
     "socket.io": "^4.8.3",
