@@ -3,6 +3,8 @@ const nextConfig = {
   images: {
     domains: ["res.cloudinary.com", "encrypted-tbn0.gstatic.com", "randomuser.me"],
   },
+  // Disable font optimization to skip fetching
+  optimizeFonts: false,
   async rewrites() {
     return [
       {
